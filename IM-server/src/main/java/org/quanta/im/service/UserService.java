@@ -1,7 +1,7 @@
 package org.quanta.im.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import org.quanta.im.user.User;
+import org.quanta.im.entity.User;
 
 /**
  * Description:

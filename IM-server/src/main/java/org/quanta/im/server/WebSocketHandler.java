@@ -1,33 +1,37 @@
 package org.quanta.im.server;
 
 import cn.hutool.json.JSONUtil;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.websocketx.CloseWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import lombok.extern.log4j.Log4j2;
-import org.quanta.im.bean.MessageRequest;
-import org.quanta.im.bean.MessageResponse;
+import org.quanta.im.message.Message;
+import org.quanta.im.message.ToGroupMessage;
+import org.quanta.im.message.ToUserMessage;
+import org.quanta.im.channel.IMChannel;
+import org.quanta.im.constans.MessageTypeConstants;
+import org.quanta.im.handle.TokenHandle;
+import org.quanta.im.entity.User;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Log4j2
+@Component
 public class WebSocketHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
+    @Resource
+    TokenHandle tokenHandle;
+
     /**
      * 消息编号
      */
     private static final AtomicInteger atomicInteger = new AtomicInteger();
-
-    /**
-     * 用户列表
-     */
-    private static final Map<Channel, String> userMap = new HashMap<>();
 
     private ChannelHandlerContext curCtx;
 
@@ -42,6 +46,10 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<WebSocketFrame
         log.info("客户端连接");
     }
 
+    /**
+     * 建立连接完成后会调用这个方法
+     * 用于校验Token和分发具体请求
+     */
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
         super.userEventTriggered(ctx, evt);
@@ -49,15 +57,24 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<WebSocketFrame
             WebSocketServerProtocolHandler.HandshakeComplete complete = (WebSocketServerProtocolHandler.HandshakeComplete) evt;
             String uri = complete.requestUri(); // 获取请求路径，接着根据自己的业务逻辑判断以及获取自己想要的参数
 //            HttpHeaders entries = complete.requestHeaders(); // 请求头
-
-            Map<String, String> param = getParam(uri);
-            // 注册用户
-            if (!userMap.containsKey(ctx.channel())) {
-                String username = param.getOrDefault("username", "未命名");
-                userMap.put(ctx.channel(), username);
-                log.info("用户登陆: [{}]", username);
-                broadcastMessage("欢迎用户 [" + username + "] 进入聊天室");
+            // 处理token并返回用户信息
+            Map<String, String> params = getParam(uri);
+            String token = params.get("token");
+            User user = null;
+            if (token == null || (user = tokenHandle.auth(token)) == null) {
+                log.info("未认证请求[{}]", ctx.channel());
+                ctx.channel().writeAndFlush(Message.builder()
+                        .data("非法请求")
+                        .build());
+                ctx.close();
+                return;
             }
+            // 注册用户
+            IMChannel.addChannel(ctx.channel(), user);
+            // 查询聊天列表
+
+            // 返回聊天列表
+            IMChannel.toUser(user.getId(),null);
         }
     }
 
@@ -85,9 +102,8 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<WebSocketFrame
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         super.channelInactive(ctx);
-        String username = userMap.remove(ctx.channel());
-        log.info("用户 [{}] 退出登陆", username);
-        broadcastMessage("用户 [" + username + "] 退出登陆");
+        User user = IMChannel.removeChanel(ctx.channel());
+        log.info("用户 [{}] 退出登陆", user);
     }
 
     @Override
@@ -99,29 +115,33 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<WebSocketFrame
         } else if (frame instanceof TextWebSocketFrame) {
             // 处理文本消息
             TextWebSocketFrame textFrame = (TextWebSocketFrame) frame;
-            String message = textFrame.text();
+            String text = textFrame.text();
             // 获取消息结构
-            MessageRequest content = JSONUtil.toBean(message, MessageRequest.class);
-            String username = content.getUsername();
+            Message message = JSONUtil.toBean(text, Message.class);
+            // 根据消息类型处理不同的情况
+            // 进入聊天室
+            if(MessageTypeConstants.ENTER_CHAT_ROOM.getCode().equals(message.getType())){
 
-            if (!userMap.get(ctx.channel()).equals(content.getUsername())) {
-                log.info("用户名更改 [{}] -> [{}]", username, content.getUsername());
-                userMap.put(ctx.channel(), content.getUsername());
-                broadcastMessage("用户名更新: [" + username + "] -> [" + content.getUsername() + "]");
+            }// 进入单人群聊
+            else if(MessageTypeConstants.ENTER_CHAT.getCode().equals(message.getType())){
+
+            }// 发送私聊消息
+            else if(MessageTypeConstants.SEND_WHISPER.getCode().equals(message.getType())){
+                ToUserMessage msg = (ToUserMessage) message.getData();
+                IMChannel.toUser(msg.getUid(),msg.getMessage());
+            }// 发送群聊消息
+            else if(MessageTypeConstants.SEND_BROADCAST.getCode().equals(message.getType())){
+                ToGroupMessage msg = (ToGroupMessage) message.getData();
+                // 获取群聊用户列表
+
+
+                // 向群聊用户广播信息
+//                IMChannel.broadcast();
             }
-            broadcastMessage(username+" : "+content.getMessage());
         }
     }
 
-    private void broadcastMessage(String message) {
-        MessageResponse response = new MessageResponse("["+atomicInteger.getAndIncrement()+"]--> "+message);
-        String jsonResponse = JSONUtil.toJsonStr(response);
 
-        userMap.keySet().stream().filter(i-> !i.equals(curCtx.channel()))
-                .forEach(e->{
-                    e.writeAndFlush(new TextWebSocketFrame(jsonResponse));
-                });
-    }
 
 
     @Override

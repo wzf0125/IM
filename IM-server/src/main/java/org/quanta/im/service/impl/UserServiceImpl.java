@@ -3,7 +3,7 @@ package org.quanta.im.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.quanta.im.mapper.UserMapper;
 import org.quanta.im.service.UserService;
-import org.quanta.im.user.User;
+import org.quanta.im.entity.User;
 
 /**
  * Description:
