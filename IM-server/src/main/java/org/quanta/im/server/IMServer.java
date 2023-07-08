@@ -15,7 +15,7 @@ import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import lombok.extern.log4j.Log4j2;
-import org.quanta.im.bean.*;
+import org.quanta.im.bean.KryoSerializer;
 
 
 /**
@@ -56,7 +56,7 @@ public class IMServer {
                             // 添加NettyKryoDecoder和NettyKryoEncoder用于对RpcRequest和RpcResponse对象进行编解码
 //                            ch.pipeline().addLast(new NettyKryoDecoder(kryoSerializer, MessageRequest.class));
 //                            ch.pipeline().addLast(new NettyKryoEncoder(kryoSerializer, MessageResponse.class));
-                            ch.pipeline().addLast(new WebSocketServerProtocolHandler("/chat"));
+                            ch.pipeline().addLast(new WebSocketServerProtocolHandler("/chat", true));
                             // 添加NettyServerHandler用于处理客户端发送的请求
                             ch.pipeline().addLast(new WebSocketHandler());
                         }
