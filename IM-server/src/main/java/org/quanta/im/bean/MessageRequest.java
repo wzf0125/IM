@@ -16,6 +16,7 @@ import lombok.*;
 @Setter
 @ToString
 public class MessageRequest {
+    private String type;
 
     private String username;
 
