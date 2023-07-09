@@ -1,8 +1,6 @@
-package org.quanta.im.user;
+package org.quanta.im.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,7 +22,7 @@ public class User {
     /**
      * 自增主键
      * */
-    @TableField("`id`")
+    @TableId(value = "id",type = IdType.AUTO)
     private Long id;
 
     /**

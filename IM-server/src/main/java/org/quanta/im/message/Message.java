@@ -1,13 +1,13 @@
-package org.quanta.im.bean;
+package org.quanta.im.message;
 
 import lombok.*;
 
 /**
- * Description: RPC响应
+ * Description:
  * Param:
  * return:
  * Author: wzf
- * Date: 2023/6/20
+ * Date: 2023/7/8
  */
 @AllArgsConstructor
 @Getter
@@ -15,8 +15,8 @@ import lombok.*;
 @Builder
 @Setter
 @ToString
-public class MessageResponse {
+public class Message {
+    private Integer type;
 
-    private String message;
-
+    private Object data;
 }

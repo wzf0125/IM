@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: root
+    url: jdbc:mysql://127.0.0.1:3306/im?&useSSL=false&serverTimezone=Asia/Shanghai
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 3
+# mybatis-plus日志打印 调试使用
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
