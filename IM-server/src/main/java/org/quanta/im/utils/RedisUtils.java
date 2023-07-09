@@ -1,5 +1,6 @@
 package org.quanta.im.utils;
 
+import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,7 +17,7 @@ import java.util.concurrent.TimeUnit;
  * @author gdufs
  * @description redis工具类
  */
-@Slf4j
+@Log4j2
 @Component // 实现bean的注入
 @SuppressWarnings("ConstantConditions")
 public class RedisUtils {

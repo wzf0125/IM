@@ -28,14 +28,20 @@ public class Group {
     /**
      * 用户id
      * */
-    @TableField("`user_id`")
-    private String userId;
+    @TableField("`chat_id`")
+    private Long chatId;
 
     /**
      * 群聊名称
      * */
     @TableField("`name`")
     private String name;
+
+    /**
+     * 群聊头像
+     * */
+    @TableField("`avatar`")
+    private String avatar;
 
     /**
      * 逻辑删除

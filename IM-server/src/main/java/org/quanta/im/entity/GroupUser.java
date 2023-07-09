@@ -29,13 +29,13 @@ public class GroupUser {
      * 群聊id
      * */
     @TableField("`group_id`")
-    private String groupId;
+    private Long groupId;
 
     /**
      * 用户id
      * */
     @TableField("`user_id`")
-    private String userId;
+    private Long userId;
 
     /**
      * 逻辑删除

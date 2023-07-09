@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.quanta.im.mapper.ChatMapper">
+
+    <select id="getWhisperList" resultMap="ChatWhisperMap">
+        SELECT c.id,
+               c.type,
+               u.id AS uid,
+               u.username,
+               u.avatar,
+               cr.active_time
+        FROM chat AS c
+                 LEFT JOIN user u ON u.id =
+                                     IF(c.target_id = #{uid}, c.user_id, c.target_id)
+                 LEFT JOIN(SELECT cr.chat_id, MAX(cr.gmt_modified) AS active_time
+                           FROM chat_record AS cr
+                           GROUP BY cr.chat_id) AS cr ON cr.chat_id = c.id
+        WHERE (c.user_id = #{uid}
+            OR c.target_id = #{uid})
+          AND c.type = 0
+    </select>
+    <resultMap id="ChatWhisperMap" type="org.quanta.im.dos.ChatWhisperDo">
+        <id property="id" column="id"/>
+        <result property="type" column="type"/>
+        <result property="activeTime" column="active_time"/>
+        <association property="targetUser" javaType="org.quanta.im.entity.User">
+            <id property="id" column="uid"/>
+            <result property="username" column="username"/>
+            <result property="avatar" column="avatar"/>
+        </association>
+    </resultMap>
+
+    <select id="getChatGroupList" resultMap="ChatGroupMap">
+        SELECT
+            c.id,
+            c.type,
+            g.`name`,
+            g.avatar,
+            g.id AS gid
+        FROM group_user AS gu
+                 LEFT JOIN `group` AS g ON g.id = gu.group_id
+                 LEFT JOIN chat AS c ON c.id = g.chat_id
+                 LEFT JOIN(SELECT cr.chat_id,
+                                  MAX(cr.gmt_modified) AS active_time
+                           FROM chat_record AS cr
+                           GROUP BY cr.chat_id) AS cr ON cr.chat_id = c.id
+        WHERE gu.user_id = #{uid}
+    </select>
+    <resultMap id="ChatGroupMap" type="org.quanta.im.dos.ChatGroupDo">
+        <id property="id" column="id"/>
+        <result property="type" column="type"/>
+        <result property="activeTime" column="active_time"/>
+        <association property="groupInfo" javaType="org.quanta.im.entity.Group">
+            <id property="id" column="gid"/>
+            <result property="name" column="name"/>
+            <result property="avatar" column="avatar"/>
+        </association>
+    </resultMap>
+</mapper>

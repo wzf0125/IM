@@ -16,7 +16,7 @@ import lombok.*;
 @Setter
 @ToString
 public class Message {
-    private Integer type;
+    private Long chatId;
 
     private Object data;
 }

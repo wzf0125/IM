@@ -11,5 +11,7 @@ import org.quanta.im.entity.User;
  * Date: 2023/7/8
  */
 public interface UserService extends IService<User> {
+    public String login(String username,String password);
 
+    public void register(User user);
 }

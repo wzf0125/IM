@@ -29,7 +29,7 @@ public class Chat {
      * 用户id
      * */
     @TableField("`user_id`")
-    private String userId;
+    private Long userId;
 
     /**
      * 类型

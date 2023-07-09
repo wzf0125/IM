@@ -1,5 +1,6 @@
 package org.quanta.im.listener;
 
+import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import org.quanta.im.server.IMServer;
 import org.springframework.context.ApplicationListener;
@@ -8,13 +9,9 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 
-/**
- * autor:liman
- * createtime:2020/9/27
- * comment:监听spring容器是否启动，如果启动了，netty也随之启动
- */
+
 @Component
-@Slf4j
+@Log4j2
 public class IMServerStarter implements ApplicationListener<ContextRefreshedEvent> {
     @Resource
     IMServer imServer;

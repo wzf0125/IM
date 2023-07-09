@@ -29,13 +29,13 @@ public class ChatRecord {
      * 聊天窗口id
      * */
     @TableField("`chat_id`")
-    private String chatId;
+    private Long chatId;
 
     /**
      * 用户id
      * */
     @TableField("`user_id`")
-    private String userId;
+    private Long userId;
 
     /**
      * 消息类型

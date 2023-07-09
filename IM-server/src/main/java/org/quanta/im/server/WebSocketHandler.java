@@ -8,13 +8,10 @@ import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import lombok.extern.log4j.Log4j2;
-import org.quanta.im.message.Message;
-import org.quanta.im.message.ToGroupMessage;
-import org.quanta.im.message.ToUserMessage;
 import org.quanta.im.channel.IMChannel;
-import org.quanta.im.constans.MessageTypeConstants;
-import org.quanta.im.handle.TokenHandle;
 import org.quanta.im.entity.User;
+import org.quanta.im.handle.TokenHandle;
+import org.quanta.im.message.Message;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -119,26 +116,9 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<WebSocketFrame
             // 获取消息结构
             Message message = JSONUtil.toBean(text, Message.class);
             // 根据消息类型处理不同的情况
-            // 进入聊天室
-            if(MessageTypeConstants.ENTER_CHAT_ROOM.getCode().equals(message.getType())){
 
-            }// 进入单人群聊
-            else if(MessageTypeConstants.ENTER_CHAT.getCode().equals(message.getType())){
-
-            }// 发送私聊消息
-            else if(MessageTypeConstants.SEND_WHISPER.getCode().equals(message.getType())){
-                ToUserMessage msg = (ToUserMessage) message.getData();
-                IMChannel.toUser(msg.getUid(),msg.getMessage());
-            }// 发送群聊消息
-            else if(MessageTypeConstants.SEND_BROADCAST.getCode().equals(message.getType())){
-                ToGroupMessage msg = (ToGroupMessage) message.getData();
-                // 获取群聊用户列表
-
-
-                // 向群聊用户广播信息
-//                IMChannel.broadcast();
-            }
         }
+
     }
 
 

@@ -88,7 +88,13 @@ public class IMChannel {
      * 发送消息给某个用户
      * */
     public static void toUser(Long uid,Object data){
-        channelMap.get(uid).writeAndFlush(data);
+        if(channelMap.containsKey(uid)){
+            channelMap.get(uid).writeAndFlush(data);
+        }
+    }
+
+    public static boolean isOnline(Long uid){
+        return channelMap.containsKey(uid);
     }
 
 }
