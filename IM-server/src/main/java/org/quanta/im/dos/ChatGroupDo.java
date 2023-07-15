@@ -1,7 +1,9 @@
 package org.quanta.im.dos;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.quanta.im.entity.Group;
 import org.quanta.im.entity.User;
@@ -17,7 +19,6 @@ import java.util.List;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@SuperBuilder
 public class ChatGroupDo extends ChatDo{
     List<Group> groupInfo;
 }

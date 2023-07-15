@@ -32,7 +32,7 @@ public class UserController {
      * */
     @PostMapping("/login")
     public Response<Object> login(@Validated @RequestBody LoginDTO param){
-        return Response.success(userService.login(param.getUsername(), param.getUsername()));
+        return Response.success(userService.login(param.getUsername(), param.getPassword()));
     }
 
     /**

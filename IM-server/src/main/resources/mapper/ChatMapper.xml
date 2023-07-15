@@ -52,10 +52,10 @@
         <id property="id" column="id"/>
         <result property="type" column="type"/>
         <result property="activeTime" column="active_time"/>
-        <association property="groupInfo" javaType="org.quanta.im.entity.Group">
+        <collection property="groupInfo" javaType="ArrayList" ofType="org.quanta.im.entity.Group">
             <id property="id" column="gid"/>
             <result property="name" column="name"/>
             <result property="avatar" column="avatar"/>
-        </association>
+        </collection>
     </resultMap>
 </mapper>

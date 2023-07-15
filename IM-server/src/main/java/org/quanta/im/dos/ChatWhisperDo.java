@@ -1,7 +1,9 @@
 package org.quanta.im.dos;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.quanta.im.entity.User;
 
@@ -14,8 +16,6 @@ import org.quanta.im.entity.User;
  * Date: 2023/7/9
  */
 @Data
-@SuperBuilder
-@EqualsAndHashCode(callSuper = true)
 public class ChatWhisperDo extends ChatDo{
 
     User targetUser;

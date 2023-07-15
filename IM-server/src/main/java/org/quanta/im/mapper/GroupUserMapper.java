@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.quanta.im.entity.GroupUser;
 
+import java.util.List;
+
 /**
  * Description:
  * Param:
@@ -13,4 +15,5 @@ import org.quanta.im.entity.GroupUser;
  */
 @Mapper
 public interface GroupUserMapper extends BaseMapper<GroupUser> {
+    public List<Long> getChatGroupUserId(Long chatId);
 }

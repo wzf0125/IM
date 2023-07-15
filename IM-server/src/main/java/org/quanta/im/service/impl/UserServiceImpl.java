@@ -11,6 +11,7 @@ import org.quanta.im.service.UserService;
 import org.quanta.im.utils.LockUtils;
 import org.quanta.im.utils.TokenUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Description:
@@ -37,6 +38,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
+    @Transactional
     public void register(User param) {
         User user = getOne(
                 new LambdaQueryWrapper<User>()

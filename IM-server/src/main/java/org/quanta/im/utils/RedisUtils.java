@@ -1,7 +1,6 @@
 package org.quanta.im.utils;
 
 import lombok.extern.log4j.Log4j2;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -317,7 +316,7 @@ public class RedisUtils {
      */
     public boolean releaseNx(String key, Object value) {
         Object currentValue = redisTemplate.opsForValue().get(key);
-        if (String.valueOf(currentValue) != null && value.equals(currentValue)) {
+        if (value == null || (String.valueOf(currentValue) != null && value.equals(currentValue))) {
             return Boolean.TRUE.equals(redisTemplate.opsForValue().getOperations().delete(key));
         }
         return false;

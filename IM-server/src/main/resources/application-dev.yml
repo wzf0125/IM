@@ -14,4 +14,4 @@ mybatis-plus:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 # 自定义异常返回情况，debug模式接口会返回异常内容，不然只会返回服务器内部异常
 project:
-  debug: true
+  isDebug: true

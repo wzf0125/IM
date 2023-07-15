@@ -68,6 +68,7 @@ public class ChatController extends BaseController{
      * */
     @GetMapping("/list")
     public Response<Object> getChatList(){
+        System.out.println(getUid());
         return Response.success(chatService.getChatList(getUid()));
     }
 }

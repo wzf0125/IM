@@ -1,5 +1,7 @@
 package org.quanta.im.bean;
 
+import org.quanta.im.constants.ResultCode;
+
 /**
  * Description: 全局响应类
  * Param:

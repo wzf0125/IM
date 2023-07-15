@@ -1,7 +1,6 @@
 package org.quanta.im.controller;
 
 import lombok.extern.log4j.Log4j2;
-import org.quanta.eas.annotation.Log;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 

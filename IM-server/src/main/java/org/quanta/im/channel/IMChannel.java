@@ -72,6 +72,21 @@ public class IMChannel {
                         channel.writeAndFlush(data));
     }
 
+
+    /**
+     * 发送消息
+     * 只发送给receiver用户
+     * 排除except用户
+     */
+    public static void broadcastById(Object data, Long receiverId, Long exceptId) {
+        channelMap.entrySet().stream()
+                .filter(entry -> entry.getKey().equals(receiverId)
+                        && !entry.getKey().equals(exceptId))
+                .forEach(entry ->
+                        entry.getValue().writeAndFlush(data));
+    }
+
+
     /**
      * 广播消息
      * 发送给receiverList列表中的用户
@@ -85,10 +100,23 @@ public class IMChannel {
     }
 
     /**
+     * 广播消息
+     * 发送给receiverList列表中的用户
+     * 排除exceptList列表用户
+     */
+    public static void broadcastById(Object data, List<Long> receiverIdList, List<Long> exceptIdList) {
+        channelMap.entrySet().stream()
+                .filter(entry -> receiverIdList.contains(entry.getKey())
+                        && !exceptIdList.contains(entry.getKey()))
+                .forEach(entry ->
+                        entry.getValue().writeAndFlush(data));
+    }
+
+    /**
      * 发送消息给某个用户
-     * */
-    public static void toUser(Long uid,Object data){
-        if(channelMap.containsKey(uid)){
+     */
+    public static void toUser(Long uid, Object data) {
+        if (channelMap.containsKey(uid)) {
             channelMap.get(uid).writeAndFlush(data);
         }
     }

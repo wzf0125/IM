@@ -1,6 +1,8 @@
 package org.quanta.im.dos;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.quanta.im.entity.User;
 
@@ -14,7 +16,6 @@ import java.util.Date;
  * Date: 2023/7/9
  */
 @Data
-@SuperBuilder
 public class ChatDo {
     /**
      * 聊天窗口id

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.quanta.im.mapper.GroupUserMapper">
+
+
+    <select id="getChatGroupUserId" resultType="org.quanta.im.entity.User">
+        SELECT u.id
+        FROM user AS u
+        WHERE u.id IN
+              (SELECT gu.user_id
+               FROM group AS g
+                        LEFT JOIN group_user gu on g.id = gu.group_id
+               WHERE g.chat_id = #{chatId})
+    </select>
+</mapper>
