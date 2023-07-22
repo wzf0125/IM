@@ -41,7 +41,7 @@
 
 <script>
 import {login, register} from "@/api/userApi";
-import {showSuccess, showError} from "@/util/utils.js";
+import {showError, showSuccess} from "@/util/utils.js";
 
 export default {
   data() {
@@ -80,7 +80,14 @@ export default {
     },
     doLogin() {
       login(JSON.stringify(this.loginForm)).then(res => {
-            showSuccess("登陆成功")
+            if (res.code === 200) {
+              var token = res.data
+              sessionStorage.setItem("Authorization", token)
+              showSuccess("登陆成功")
+              this.$router.push("/ChatHome")
+            } else {
+              showError(res.msg)
+            }
           }
       )
     },
